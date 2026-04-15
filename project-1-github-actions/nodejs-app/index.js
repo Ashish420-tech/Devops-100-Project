@@ -4,3 +4,5 @@ http.createServer((req, res) => {
   res.write("DevOps Project 1 Working 🚀");
   res.end();
 }).listen(3000);
+
+console.log("Server running on port 3000");

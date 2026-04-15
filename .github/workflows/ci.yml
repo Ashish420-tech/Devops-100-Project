@@ -22,7 +22,7 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: npm ci
-        working-directory: ./nodejs-app
+        working-directory: ./project-1-github-actions/nodejs-app
 
       # Run tests
       - name: Run tests
@@ -45,7 +45,7 @@ jobs:
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./nodejs-app
+          context: ./project-1-github-actions/nodejs-app
           push: true
           tags: ashishmondal420/nodejs-app:latest
 
