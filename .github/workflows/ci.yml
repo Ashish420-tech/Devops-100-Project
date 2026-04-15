@@ -1,8 +1,7 @@
 on:
   push:
-    branches: 
+    branches:
       - "*"
-      
 
 jobs:
   build:
@@ -27,12 +26,12 @@ jobs:
       # Run tests
       - name: Run tests
         run: npm test
-        working-directory: ./nodejs-app
+        working-directory: ./project-1-github-actions/nodejs-app
 
       # Build app
       - name: Build app
         run: npm run build
-        working-directory: ./nodejs-app
+        working-directory: ./project-1-github-actions/nodejs-app
 
       # Login to Docker Hub
       - name: Login to Docker Hub
