@@ -5,18 +5,37 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-steps:
-  - uses: actions/checkout@v4
 
-  - uses: actions/setup-node@v4
-    with:
-      node-version: 18
+    steps:
+      # Checkout code
+      - uses: actions/checkout@v4
+
+      # Setup Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # Install, test, build
       - run: npm ci
+        working-directory: ./nodejs-app
+
       - run: npm test
+        working-directory: ./nodejs-app
+
       - run: npm run build
-      - name: Build Docker image
+        working-directory: ./nodejs-app
+
+      # Login to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build and Push Docker Image
+      - name: Build and Push Docker image
         uses: docker/build-push-action@v5
         with:
           context: ./nodejs-app
-          push: false
-          tags: your-dockerhub-username/nodejs-app:latest
+          push: true
+          tags: ashishmondal420/nodejs-app:latest
