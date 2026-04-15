@@ -1,6 +1,8 @@
 on:
   push:
-    branches: [main]
+    branches: 
+      - main
+      - project-1-github-action
 
 jobs:
   build:
