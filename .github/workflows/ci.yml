@@ -17,6 +17,6 @@ steps:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./nodejs-app
           push: false
           tags: your-dockerhub-username/nodejs-app:latest
