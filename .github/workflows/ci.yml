@@ -47,7 +47,7 @@ jobs:
         with:
           context: ./nodejs-app
           push: true
-          tags: ashish420tech/nodejs-app:latest
+          tags: ashishmondal420/nodejs-app:latest
 
       # Deploy to EC2 via SSH
       - name: Deploy to EC2
@@ -57,7 +57,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            docker pull ashish420tech/nodejs-app:latest
+            docker pull ashishmondal420/nodejs-app:latest
             docker stop nodejs-app || true
             docker rm nodejs-app || true
-            docker run -d -p 80:3000 --name nodejs-app ashish420tech/nodejs-app:latest
+            docker run -d -p 80:3000 --name nodejs-app ashishmondal420/nodejs-app:latest
