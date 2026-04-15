@@ -14,3 +14,9 @@ steps:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: your-dockerhub-username/nodejs-app:latest
