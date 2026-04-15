@@ -15,17 +15,15 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install & Test') {
+            agent {
+                docker {
+                    image 'node:18'
+                }
+            }
             steps {
                 dir("${APP_DIR}") {
                     sh 'npm install'
-                }
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                dir("${APP_DIR}") {
                     sh 'npm test'
                 }
             }
@@ -57,7 +55,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to EC2') {
+        stage('Deploy') {
             steps {
                 sh """
                 docker stop nodejs-app || true
@@ -65,15 +63,6 @@ pipeline {
                 docker run -d -p 80:3000 --name nodejs-app ${DOCKER_IMAGE}
                 """
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline executed successfully 🚀'
-        }
-        failure {
-            echo 'Pipeline failed ❌'
         }
     }
 }
