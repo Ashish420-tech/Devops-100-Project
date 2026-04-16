@@ -8,3 +8,11 @@ image:
 service:
   type: NodePort
   port: 80
+
+serviceAccount:
+  create: true
+
+autoscaling:
+  enabled: false
+
+fullnameOverride: nginx-demo
