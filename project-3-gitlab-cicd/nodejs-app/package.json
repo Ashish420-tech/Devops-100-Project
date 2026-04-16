@@ -1,0 +1,13 @@
+{
+  "name": "nodejs-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Test passed\"",
+     "build": "echo \"build successful\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
