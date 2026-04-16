@@ -1,0 +1,53 @@
+stages:
+  - build
+  - test
+  - scan
+  - staging-deploy
+  - prod-deploy
+
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+
+build:
+  stage: build
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA ./project-1-github-actions/nodejs-app
+
+test:
+  stage: test
+  parallel: 2
+  script:
+    - echo "Running tests..."
+
+scan:
+  stage: scan
+  image: sonarsource/sonar-scanner-cli
+  before_script: []
+  script:
+    - sonar-scanner -Dsonar.projectKey=ashish420-tech2026_Ashish-project -Dsonar.organization=ashish420-tech2026 -Dsonar.login=$SONAR_TOKEN
+
+staging-deploy:
+  stage: staging-deploy
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  before_script: []
+  script:
+    - kubectl set image deployment/my-app my-app=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+
+prod-deploy:
+  stage: prod-deploy
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  before_script: []
+  script:
+    - kubectl set image deployment/my-app my-app=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  when: manual
+  only:
+    - main
