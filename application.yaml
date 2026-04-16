@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/Ashish420-tech/Devops-100-Project.git
     targetRevision: project-4-gitops-demo
-    path: k8s
+    path: project-4-gitops-demo/k8s
 
   destination:
     server: https://kubernetes.default.svc
