@@ -36,15 +36,16 @@ staging-deploy:
   image:
     name: bitnami/kubectl:latest
     entrypoint: [""]
+  before_script: []
   script:
     - kubectl set image deployment/my-app my-app=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-
 
 prod-deploy:
   stage: prod-deploy
   image:
     name: bitnami/kubectl:latest
     entrypoint: [""]
+  before_script: []
   script:
     - kubectl set image deployment/my-app my-app=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   when: manual
