@@ -64,15 +64,16 @@ kubectl get secret -n monitoring kube-prometheus-stack-grafana -o jsonpath="{.da
 Kubernetes Cluster Monitoring
 Node Exporter Full
 Kubernetes Pods Monitoring
-📸 Screenshots
-🔹 Grafana Dashboard
+## 📸 Screenshots
 
-🔹 Node Exporter Metrics
+### 🔹 Grafana Dashboard
+![Grafana Dashboard](screenshots/grafana-dashboard.png)
 
-🔹 Prometheus Targets
+### 🔹 Node Exporter Metrics
+![Node Exporter](screenshots/node-exporter.png)
 
-🔹 Alert Firing
-
+### 🔹 Alert Firing 🚨
+![Alert Firing](screenshots/alert-firing.png)
 🚨 Custom Alert Rule
 - alert: HighPodRestart
   expr: increase(kube_pod_container_status_restarts_total[5m]) > 5
