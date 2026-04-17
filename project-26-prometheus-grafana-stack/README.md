@@ -57,12 +57,16 @@ kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
 Kubernetes Cluster Monitoring
 Node Exporter Full
 Kubernetes Pods Monitoring
-📸 Screenshots
-🔹 Grafana Dashboard
+## 📸 Screenshots
 
-🔹 Node Exporter Metrics
+### 🔹 Grafana Dashboard
+<img src="https://raw.githubusercontent.com/Ashish420-tech/Devops-100-Project/project-26-prometheus-grafana-stack/project-26-prometheus-grafana-stack/screenshots/grafana-dashboard.png" width="800"/>
 
-🔹 Alert Firing 🚨
+### 🔹 Node Exporter Metrics
+<img src="https://raw.githubusercontent.com/Ashish420-tech/Devops-100-Project/project-26-prometheus-grafana-stack/project-26-prometheus-grafana-stack/screenshots/node-exporter.png" width="800"/>
+
+### 🔹 Alert Firing 🚨
+<img src="https://raw.githubusercontent.com/Ashish420-tech/Devops-100-Project/project-26-prometheus-grafana-stack/project-26-prometheus-grafana-stack/screenshots/alert-firing.png" width="800"/>
 
 🚨 Custom Alert Rule
 - alert: HighPodRestart
