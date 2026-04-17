@@ -13,7 +13,6 @@ The goal was to build **end-to-end monitoring + alerting** and validate it using
 ---
 
 ## 🛠 Tech Stack
-
 - Kubernetes (Minikube)
 - Helm
 - Prometheus
@@ -26,15 +25,13 @@ The goal was to build **end-to-end monitoring + alerting** and validate it using
 
 ## 📂 Project Structure
 
-
 project-26-prometheus-grafana-stack/
-│── README.md
-│── helm-values/
-│── screenshots/
-│ ├── grafana-dashboard.png
-│ ├── node-exporter.png
-│ ├── prometheus-targets.png
-│ ├── alert-firing.png
+├── README.md
+├── helm-values/
+└── screenshots/
+├── grafana-dashboard.png
+├── node-exporter.png
+└── alert-firing.png
 
 
 ---
@@ -44,22 +41,18 @@ project-26-prometheus-grafana-stack/
 ### 1. Start Minikube
 ```bash
 minikube start
-2. Create namespace
+2. Create Namespace
 kubectl create namespace monitoring
-3. Add Helm repo
+3. Add Helm Repo
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-4. Install stack
+4. Install Stack
 helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack -n monitoring
 📊 Access Grafana
 kubectl port-forward svc/kube-prometheus-stack-grafana 3001:80 -n monitoring
 
 👉 Open: http://localhost:3001
 
-Login:
-Username: admin
-Password:
-kubectl get secret -n monitoring kube-prometheus-stack-grafana -o jsonpath="{.data.admin-password}" | base64 --decode
 📈 Dashboards Used
 Kubernetes Cluster Monitoring
 Node Exporter Full
@@ -69,9 +62,7 @@ Kubernetes Pods Monitoring
 
 🔹 Node Exporter Metrics
 
-🔹 Prometheus Targets
-
-🔹 Alert Firing
+🔹 Alert Firing 🚨
 
 🚨 Custom Alert Rule
 - alert: HighPodRestart
@@ -86,8 +77,8 @@ Kubernetes Pods Monitoring
 kubectl run crash-pod --image=busybox --restart=Always -- /bin/sh -c "while true; do sleep 1; exit 1; done"
 🚨 Alert Triggered
 Condition met → restart count increased
-Alert state transitioned:
-Inactive → Pending → Firing
+Alert lifecycle:
+Inactive → Pending → Firing 🚨
 🧠 Key Learnings
 Prometheus metrics collection and querying (PromQL)
 Grafana dashboard visualization
