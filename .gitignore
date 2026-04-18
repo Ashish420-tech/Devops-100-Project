@@ -17,3 +17,21 @@ Thumbs.db
 
 # Helm (optional cache)
 *.tgz
+# Kubernetes secrets / configs
+*.secret.yaml
+secrets.yaml
+*.env
+
+# Local kube config (never push this)
+.kube/
+kubeconfig
+
+# Terraform (if used later)
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Node / temp
+node_modules/
+tmp/
+temp/
