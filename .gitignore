@@ -73,3 +73,7 @@ tmp/
 temp/
 *.tmp
 *.bak
+# Python Virtual Environment
+venv/
+.venv/
+env/
