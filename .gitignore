@@ -9,6 +9,8 @@ Thumbs.db
 # ==============================
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # ==============================
 # Logs
@@ -22,21 +24,24 @@ yarn-error.log*
 # Node.js
 # ==============================
 node_modules/
-frontend/node_modules/
-backend/node_modules/
+.npm/
+.cache/
+.parcel-cache/
+.eslintcache
 
 # ==============================
 # Build Output
 # ==============================
 dist/
 build/
-frontend/dist/
+coverage/
 
 # ==============================
 # Environment Files
 # ==============================
 .env
-*.env
+.env.*
+!.env.example
 
 # ==============================
 # Kubernetes / Secrets
@@ -44,12 +49,15 @@ frontend/dist/
 *.secret.yaml
 secrets.yaml
 .kube/
-kubeconfig
+kubeconfig*
+*.key
+*.crt
 
 # ==============================
 # Docker
 # ==============================
 *.tar
+docker-compose.override.yml
 
 # ==============================
 # Terraform (Optional)
@@ -64,8 +72,4 @@ kubeconfig
 tmp/
 temp/
 *.tmp
-
-# ==============================
-# Coverage
-# ==============================
-coverage/
+*.bak
