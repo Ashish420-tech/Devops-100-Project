@@ -1,37 +1,71 @@
-# Ignore ArgoCD local file
-application.yaml
-
-# OS files
+# ==============================
+# OS Files
+# ==============================
 .DS_Store
 Thumbs.db
 
-# Editor files
+# ==============================
+# Editor / IDE
+# ==============================
 .vscode/
 .idea/
 
+# ==============================
 # Logs
+# ==============================
+logs/
 *.log
+npm-debug.log*
+yarn-error.log*
 
-# Temp files
-*.tmp
+# ==============================
+# Node.js
+# ==============================
+node_modules/
+frontend/node_modules/
+backend/node_modules/
 
-# Helm (optional cache)
-*.tgz
-# Kubernetes secrets / configs
-*.secret.yaml
-secrets.yaml
+# ==============================
+# Build Output
+# ==============================
+dist/
+build/
+frontend/dist/
+
+# ==============================
+# Environment Files
+# ==============================
+.env
 *.env
 
-# Local kube config (never push this)
+# ==============================
+# Kubernetes / Secrets
+# ==============================
+*.secret.yaml
+secrets.yaml
 .kube/
 kubeconfig
 
-# Terraform (if used later)
+# ==============================
+# Docker
+# ==============================
+*.tar
+
+# ==============================
+# Terraform (Optional)
+# ==============================
 .terraform/
 *.tfstate
 *.tfstate.backup
 
-# Node / temp
-node_modules/
+# ==============================
+# Temporary Files
+# ==============================
 tmp/
 temp/
+*.tmp
+
+# ==============================
+# Coverage
+# ==============================
+coverage/
