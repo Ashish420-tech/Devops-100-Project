@@ -1,0 +1,45 @@
+name: Multi Environment CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME: multi-env-app
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: |
+          docker build -t $IMAGE_NAME:${{ github.sha }} ./project-05-multi-env-deployment/app
+
+  deploy-dev:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to DEV
+        run: echo "Deploying to DEV environment"
+
+  deploy-staging:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to STAGING
+        run: echo "Deploying to STAGING environment"
+
+  deploy-prod:
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to PROD
+        run: echo "Deploying to PROD environment"
