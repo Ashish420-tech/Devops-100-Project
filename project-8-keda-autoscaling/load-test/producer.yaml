@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: producer
+spec:
+  containers:
+  - name: producer
+    image: redis
+    command: ["/bin/sh","-c"]
+    args:
+      - |
+        while true; do
+          redis-cli -h redis LPUSH jobs "task";
+          sleep 1;
+        done
