@@ -3,6 +3,8 @@
 
 This project demonstrates Kubernetes Horizontal Pod Autoscaling (HPA) based on CPU utilization.
 
+
+
 🧱 Architecture
 Deployment (CPU-bound container)
 Service (NodePort)
@@ -12,12 +14,18 @@ HPA Controller
 minikube start
 minikube addons enable metrics-server
 kubectl apply -f k8s/
+
+
+
 📊 Verify Metrics
 kubectl top nodes
 kubectl top pods
 🚀 Trigger Scaling
 kubectl get hpa -w
 kubectl get pods -w
+
+
+
 🔥 Results
 CPU utilization exceeded 400%
 Pods scaled from 1 → 10 automatically
