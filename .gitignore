@@ -77,3 +77,7 @@ temp/
 venv/
 .venv/
 env/
+*.log
+node_modules/
+.env
+.DS_Store
