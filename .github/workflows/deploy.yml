@@ -9,20 +9,31 @@ env:
   IMAGE_NAME: multi-env-app
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build Docker Image
         run: |
-          docker build -t $IMAGE_NAME:${{ github.sha }} ./project-05-multi-env-deployment/app
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/multi-env-app:${{ github.sha }} ./project-05-multi-env-deployment/app
+
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/multi-env-app:${{ github.sha }}
 
   deploy-dev:
     needs: build
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
       - name: Deploy to DEV
@@ -31,6 +42,7 @@ jobs:
   deploy-staging:
     needs: deploy-dev
     runs-on: ubuntu-latest
+    environment: staging
 
     steps:
       - name: Deploy to STAGING
@@ -39,6 +51,7 @@ jobs:
   deploy-prod:
     needs: deploy-staging
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - name: Deploy to PROD
