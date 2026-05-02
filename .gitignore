@@ -1,83 +1,53 @@
-# ==============================
+# =========================
+# Terraform
+# =========================
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+
+# =========================
+# Ansible
+# =========================
+*.retry
+
+# =========================
+# SSH Keys (VERY IMPORTANT)
+# =========================
+*.pem
+*.key
+id_rsa
+id_rsa.pub
+
+# =========================
+# Kubernetes
+# =========================
+kubeconfig
+.kube/
+
+# =========================
 # OS Files
-# ==============================
+# =========================
 .DS_Store
 Thumbs.db
 
-# ==============================
+# =========================
 # Editor / IDE
-# ==============================
+# =========================
 .vscode/
 .idea/
-*.swp
-*.swo
 
-# ==============================
+# =========================
 # Logs
-# ==============================
-logs/
+# =========================
 *.log
-npm-debug.log*
-yarn-error.log*
 
-# ==============================
-# Node.js
-# ==============================
-node_modules/
-.npm/
-.cache/
-.parcel-cache/
-.eslintcache
-
-# ==============================
-# Build Output
-# ==============================
-dist/
-build/
-coverage/
-
-# ==============================
+# =========================
 # Environment Files
-# ==============================
+# =========================
 .env
-.env.*
-!.env.example
-
-# ==============================
-# Kubernetes / Secrets
-# ==============================
-*.secret.yaml
-secrets.yaml
-.kube/
-kubeconfig*
-*.key
-*.crt
-
-# ==============================
-# Docker
-# ==============================
-*.tar
-docker-compose.override.yml
-
-# ==============================
-# Terraform (Optional)
-# ==============================
-.terraform/
-*.tfstate
-*.tfstate.backup
-
-# ==============================
-# Temporary Files
-# ==============================
-tmp/
-temp/
-*.tmp
-*.bak
-# Python Virtual Environment
-venv/
-.venv/
-env/
-*.log
-node_modules/
-.env
-.DS_Store
