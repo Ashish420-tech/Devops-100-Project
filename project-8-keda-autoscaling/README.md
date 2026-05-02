@@ -1,170 +1,190 @@
-🚀 Project: Event-Driven Autoscaling with KEDA
+🚀 Project: Event-Driven Autoscaling with KEDA + AWS SQS
 📌 Overview
 
-This project demonstrates event-driven autoscaling in Kubernetes using KEDA (Kubernetes Event-Driven Autoscaler).
+This project demonstrates event-driven autoscaling in Kubernetes using:
 
-Unlike traditional autoscaling (HPA), which relies on CPU or memory metrics, this system scales workloads based on external events, specifically Redis queue length.
+KEDA
+Amazon SQS
+
+Unlike traditional autoscaling (HPA), which relies on CPU/memory, this system scales workloads based on SQS queue depth.
 
 🧠 Problem Statement
 
-Traditional autoscaling approaches:
+Traditional autoscaling:
 
-Depend on CPU/memory usage
+Depends on CPU/memory metrics
 Cannot scale to zero
-Waste resources during idle periods
+Inefficient for queue-based workloads
+✅ Solution
 
-This project solves these limitations by:
+KEDA enables:
 
-Scaling pods only when work exists
-Scaling down to zero when idle
-Reacting to real-time queue demand
+No messages → 0 pods
+Messages arrive → automatic scaling
+
+👉 This provides cost-efficient, event-driven scaling
+
 ⚙️ Architecture
-[ Producer Pod ]
-        ↓ (LPUSH jobs)
-     [ Redis Queue ]
-        ↓ (Queue Length > Threshold)
-     [ KEDA ]
+AWS CLI / Producer
+        ↓ (SendMessage)
+Amazon SQS Queue
+        ↓ (Queue Depth)
+KEDA
         ↓ (creates HPA internally)
-     [ Worker Pods ]
-🧩 Components Explained
-1. Redis (Event Source)
-Acts as a message queue
-Stores incoming jobs
-KEDA monitors queue length
-2. Producer Pod
-Continuously pushes jobs into Redis
-Simulates real-world workload (e.g., background jobs)
-3. Worker Deployment
-Processes jobs from queue
+Worker Pods (Kubernetes)
+🧩 Components
+🔹 Amazon SQS
+Managed message queue
+Stores jobs/messages
+Provides queue depth metric
+🔹 KEDA
+Monitors SQS queue length
+Converts events → metrics
+Triggers Kubernetes scaling
+🔹 Worker Deployment
+Processes queue messages
 Starts with 0 replicas
-Scaled dynamically by KEDA
-4. KEDA ScaledObject (Core Logic)
+Scales dynamically
+🔹 TriggerAuthentication
+Connects Kubernetes → AWS
+Uses IAM access keys
+🔹 ScaledObject (Core)
 
 Defines:
 
-Target deployment (queue-worker)
-Trigger source (Redis)
+Target deployment
+SQS queue trigger
 Scaling threshold
-🔥 Key Feature: Scale-to-Zero
-
-Unlike HPA:
-
-No jobs → No pods → Zero resource usage
-
-When jobs arrive:
-
-Queue increases → Pods scale up instantly
 📊 Scaling Logic
+Queue depth > threshold → scale up
+Queue empty → scale down to 0
 
-KEDA monitors:
+Example:
 
-Redis Queue Length (LLEN jobs)
-
-Scaling rule:
-
-If queue length > 5 → scale up
-If queue empty → scale down to 0
+Messages	Pods
+0	0
+10	1–2
+50	3–5
 🛠️ Implementation Steps
-1. Install KEDA
+1️⃣ Install KEDA
 helm repo add kedacore https://kedacore.github.io/charts
 helm install keda kedacore/keda --namespace keda --create-namespace
-2. Deploy Redis
-kubectl apply -f k8s/redis.yaml
-3. Deploy Worker (initial replicas = 0)
+2️⃣ Create SQS Queue
+Go to AWS SQS
+Create queue: keda-demo-queue
+Copy Queue URL
+3️⃣ Create IAM User
+
+Using AWS Identity and Access Management:
+
+Create user with:
+AmazonSQSFullAccess
+Generate:
+Access Key
+Secret Key
+4️⃣ Create Kubernetes Secret
+kubectl create secret generic aws-secret \
+  --from-literal=AWS_ACCESS_KEY_ID=<your-key> \
+  --from-literal=AWS_SECRET_ACCESS_KEY=<your-secret>
+5️⃣ Create TriggerAuthentication
+kubectl apply -f - <<EOF
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: aws-auth
+spec:
+  secretTargetRef:
+  - parameter: awsAccessKeyID
+    name: aws-secret
+    key: AWS_ACCESS_KEY_ID
+  - parameter: awsSecretAccessKey
+    name: aws-secret
+    key: AWS_SECRET_ACCESS_KEY
+EOF
+6️⃣ Deploy Worker
 kubectl apply -f k8s/worker-deployment.yaml
-4. Configure KEDA Scaling
+7️⃣ Configure KEDA (SQS)
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: worker-scaler
+spec:
+  scaleTargetRef:
+    name: queue-worker
+  minReplicaCount: 0
+  maxReplicaCount: 10
+  cooldownPeriod: 30
+  triggers:
+  - type: aws-sqs-queue
+    metadata:
+      queueURL: <YOUR_SQS_URL>
+      awsRegion: ap-south-1
+      queueLength: "5"
+    authenticationRef:
+      name: aws-auth
+8️⃣ Apply Configuration
 kubectl apply -f k8s/keda-scaledobject.yaml
-5. Generate Load
-kubectl apply -f load-test/producer.yaml
-6. Observe Scaling
+9️⃣ Send Messages
+aws sqs send-message \
+  --queue-url <QUEUE_URL> \
+  --message-body "test"
+🔟 Watch Scaling
 kubectl get pods -w
-7. Stop Load (Scale-to-Zero)
-kubectl delete pod producer
+🔥 11. Scale to Zero
+aws sqs purge-queue --queue-url <QUEUE_URL>
 📈 Observations
 🔹 Scale Up
-0 → 1 → multiple pods
-
-Triggered when:
-
-Queue length exceeds threshold
-🔹 Burst Scaling
-Multiple pods created simultaneously
-Handles sudden workload spikes efficiently
+0 → multiple pods
+🔹 Event-driven scaling
+Based on queue backlog
+Not CPU usage
 🔹 Scale Down
-multiple → 1 → 0 pods
+pods → 0
+⚠️ Challenges & Fixes
+❌ AccessDenied (SQS)
 
-Triggered when:
+✔ Fix:
 
-Queue is empty
-⚠️ Challenges Faced & Fixes
-❌ Issue: KEDA not triggering
+AmazonSQSFullAccess policy
+❌ Not scaling to zero
 
-Cause: Incorrect Redis address
-Fix:
-
-address: redis.default.svc.cluster.local:6379
-❌ Issue: Not scaling to zero
-
-Cause: HPA minReplicas = 1
-Fix:
+✔ Fix:
 
 minReplicaCount: 0
 cooldownPeriod: 30
-❌ Issue: Pods not scaling down
+❌ Queue not empty
 
-Cause: Queue still had jobs
-Fix:
+✔ Fix:
 
-redis-cli DEL jobs
+aws sqs purge-queue
 🧠 Key Learnings
 KEDA enables event-driven autoscaling
-Scaling depends on external system state
-KEDA internally creates and manages HPA
-Scale-down is delayed due to cooldown/stabilization
-Queue-based systems require backlog awareness
+SQS is eventually consistent
+Scaling depends on queue backlog
+KEDA internally uses HPA
+Scale-to-zero is crucial for cost optimization
 💡 Real-World Use Cases
-Background job processing systems
-Message queues (SQS, Kafka, RabbitMQ)
-Event-driven microservices
-Cost-optimized serverless-like workloads
+Background job processing
+Microservices with async workflows
+Serverless-like architectures
+Queue-driven systems
 🔐 Production Considerations
-Use SQS/Kafka instead of Redis
-Configure IAM roles (IRSA)
-Set proper:
-cooldown periods
-scaling thresholds
-max replicas
-Monitor using Prometheus/Grafana
-🧪 Commands Reference
-# Check queue length
-redis-cli LLEN jobs
-
-# Clear queue
-redis-cli DEL jobs
-
-# Check KEDA objects
-kubectl get scaledobject
-
-# Check HPA created by KEDA
-kubectl get hpa
+Use IAM Roles (IRSA) instead of access keys
+Tune:
+queue thresholds
+cooldown period
+Add monitoring (Prometheus + Grafana)
+Use Dead Letter Queues (DLQ)
 📁 Project Structure
 project-8-keda-autoscaling/
 │
 ├── k8s/
-│   ├── redis.yaml
 │   ├── worker-deployment.yaml
 │   ├── keda-scaledobject.yaml
 │
 ├── load-test/
-│   └── producer.yaml
 │
 └── README.md
 🏁 Conclusion
 
-This project demonstrates a production-relevant autoscaling pattern where applications scale based on real workload demand rather than system resource usage.
-
-It highlights how modern cloud-native systems achieve:
-
-Efficient resource utilization
-Cost optimization
-Real-time responsiveness
+This project demonstrates a production-ready autoscaling system where workloads scale dynamically based on real-time queue demand.
