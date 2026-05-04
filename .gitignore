@@ -130,3 +130,19 @@ charts/
 # 🧪 Minikube
 ##################################
 .minikube/
+# Terraform (future safe)
+.terraform/
+*.tfstate
+
+# AWS creds safety
+*.pem
+*.key
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# kubeconfig (important)
+kubeconfig
