@@ -1,0 +1,20 @@
+# Kubernetes
+*.kubeconfig
+
+# Istio
+istio-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temp
+tmp/
+*.tmp
+
+# Terraform (future use)
+.terraform/
+terraform.tfstate*
