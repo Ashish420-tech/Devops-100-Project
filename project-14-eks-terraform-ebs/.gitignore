@@ -1,0 +1,10 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# AWS
+*.pem
+
+# Logs
+*.log
