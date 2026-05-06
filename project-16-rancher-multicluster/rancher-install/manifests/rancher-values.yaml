@@ -1,0 +1,9 @@
+hostname: rancher.local
+
+replicas: 1
+
+bootstrapPassword: admin123
+
+ingress:
+  tls:
+    source: rancher

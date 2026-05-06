@@ -1,0 +1,6 @@
+defaultNamespace: fleet-demo
+
+targets:
+  - clusterSelector:
+      matchLabels:
+        env: dev
