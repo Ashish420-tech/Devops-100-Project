@@ -483,7 +483,65 @@ Always destroy infrastructure after practice:
 ```bash
 terraform destroy
 ```
+After terraform destroy completes, run these commands to verify all major AWS resources are deleted. ✅
+# Check EKS Clusters
+aws eks list-clusters
 
+# Check EC2 Instances
+aws ec2 describe-instances \
+--query "Reservations[*].Instances[*].[InstanceId,State.Name]" \
+--output table
+
+# Check NAT Gateways
+aws ec2 describe-nat-gateways \
+--query "NatGateways[*].[NatGatewayId,State]" \
+--output table
+
+# Check VPCs
+aws ec2 describe-vpcs \
+--query "Vpcs[*].[VpcId,CidrBlock]" \
+--output table
+
+# Check Elastic IPs
+aws ec2 describe-addresses \
+--query "Addresses[*].[PublicIp]" \
+--output table
+
+# Check Load Balancers
+aws elbv2 describe-load-balancers \
+--query "LoadBalancers[*].[LoadBalancerName,State.Code]" \
+--output table
+
+Expected Result
+
+Ideally you should see:
+
+EKS
+{
+    "clusters": []
+}
+EC2
+No running instances
+NAT Gateway
+
+Empty or deleted resources.
+
+Load Balancer
+
+Empty output.
+
+MOST IMPORTANT CHECK
+
+This command is the fastest overall verification:
+
+aws resourcegroupstaggingapi get-resources \
+--tag-filters Key=Name,Values='devops-eks-cluster*'
+
+If it returns:
+
+{
+    "ResourceTagMappingList": []
+}
 ---
 
 # Key Learning Outcomes
