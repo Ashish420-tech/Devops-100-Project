@@ -81,7 +81,7 @@ resource "aws_eks_node_group" "nodes" {
     max_size     = 3
   }
 
-  instance_types = ["t3.medium"]
+  instance_types = ["t3.micro"]
   ami_type       = "AL2023_x86_64_STANDARD"
   capacity_type  = "ON_DEMAND"
 
