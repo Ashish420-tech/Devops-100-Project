@@ -1,0 +1,10 @@
+Application deployed successfully!
+
+Check pods:
+kubectl get pods
+
+Check service:
+kubectl get svc
+
+Environment:
+{{ .Values.env }}

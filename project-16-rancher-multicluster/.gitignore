@@ -1,0 +1,26 @@
+# Kubernetes
+*.kubeconfig
+kubeconfig
+*.pem
+*.key
+*.crt
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# Logs
+*.log
+
+# VSCode
+.vscode/
+
+# Linux
+*.swp
+
+# Rancher
+cattle-system/
+
+# Helm
+charts/

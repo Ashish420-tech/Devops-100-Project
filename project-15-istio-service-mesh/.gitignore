@@ -1,0 +1,50 @@
+# Kubernetes
+*.kubeconfig
+
+# Istio
+istio-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temp
+tmp/
+*.tmp
+
+# Terraform (future use)
+.terraform/
+terraform.tfstate*
+# Kubernetes
+*.kubeconfig
+
+# Istio
+istio-*
+!istio/install-istio.sh   # keep your script
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temp
+tmp/
+*.tmp
+
+# Terraform
+.terraform/
+terraform.tfstate*
+terraform.tfstate.backup
+*.tfvars
+
+# Terraform lock file
+.terraform.lock.hcl
+
+# IDE
+.vscode/
+.idea/

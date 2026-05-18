@@ -1,0 +1,35 @@
+NAMESPACE     NAME                                                   READY   STATUS    RESTARTS   AGE
+awx           pod/awx-demo-postgres-15-0                             0/1     Pending   0          6m19s
+awx           pod/awx-operator-controller-manager-86b96cbb4c-2qp9b   1/1     Running   0          67m
+kube-system   pod/aws-node-462f6                                     2/2     Running   0          81m
+kube-system   pod/aws-node-gsz8j                                     2/2     Running   0          81m
+kube-system   pod/aws-node-wx9wp                                     2/2     Running   0          81m
+kube-system   pod/coredns-5d5f56f475-ncrp6                           1/1     Running   0          85m
+kube-system   pod/coredns-5d5f56f475-sqf44                           1/1     Running   0          106m
+kube-system   pod/kube-proxy-jzg8d                                   1/1     Running   0          81m
+kube-system   pod/kube-proxy-qvmmh                                   1/1     Running   0          81m
+kube-system   pod/kube-proxy-xmnfh                                   1/1     Running   0          81m
+
+NAMESPACE     NAME                                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                  AGE
+awx           service/awx-demo-postgres-15                              ClusterIP   None             <none>        5432/TCP                 6m20s
+awx           service/awx-operator-controller-manager-metrics-service   ClusterIP   172.20.139.229   <none>        8443/TCP                 115m
+default       service/kubernetes                                        ClusterIP   172.20.0.1       <none>        443/TCP                  140m
+kube-system   service/eks-extension-metrics-api                         ClusterIP   172.20.186.15    <none>        443/TCP                  140m
+kube-system   service/kube-dns                                          ClusterIP   172.20.0.10      <none>        53/UDP,53/TCP,9153/TCP   139m
+
+NAMESPACE     NAME                        DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+kube-system   daemonset.apps/aws-node     3         3         3       3            3           <none>          139m
+kube-system   daemonset.apps/kube-proxy   3         3         3       3            3           <none>          139m
+
+NAMESPACE     NAME                                              READY   UP-TO-DATE   AVAILABLE   AGE
+awx           deployment.apps/awx-operator-controller-manager   1/1     1            1           115m
+kube-system   deployment.apps/coredns                           2/2     2            2           139m
+
+NAMESPACE     NAME                                                         DESIRED   CURRENT   READY   AGE
+awx           replicaset.apps/awx-operator-controller-manager-56f5d4569c   0         0         0       115m
+awx           replicaset.apps/awx-operator-controller-manager-5949f4d769   0         0         0       77m
+awx           replicaset.apps/awx-operator-controller-manager-86b96cbb4c   1         1         1       67m
+kube-system   replicaset.apps/coredns-5d5f56f475                           2         2         2       139m
+
+NAMESPACE   NAME                                    READY   AGE
+awx         statefulset.apps/awx-demo-postgres-15   0/1     6m20s

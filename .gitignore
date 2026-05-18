@@ -1,79 +1,148 @@
-# ==============================
-# OS Files
-# ==============================
-.DS_Store
-Thumbs.db
+##################################
+# 🔐 Secrets & Sensitive Files
+##################################
+.env
+.env.*
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa
+id_dsa
+*.tfvars
+secrets.yaml
 
-# ==============================
-# Editor / IDE
-# ==============================
+##################################
+# 🐳 Docker
+##################################
+docker-compose.override.yml
+*.log
+*.pid
+
+##################################
+# ⚙️ Terraform
+##################################
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+
+##################################
+# ☸️ Kubernetes
+##################################
+kubeconfig
+*.kubeconfig
+kubeconfig.yaml
+
+##################################
+# 🧪 Ansible
+##################################
+*.retry
+
+##################################
+# 🟢 Node.js
+##################################
+node_modules/
+dist/
+build/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+##################################
+# 🐍 Python
+##################################
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env/
+
+##################################
+# ☕ Java / Maven / Gradle
+##################################
+target/
+*.jar
+*.war
+*.ear
+.gradle/
+build/
+
+##################################
+# 🧰 IDE / Editor
+##################################
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# ==============================
-# Logs
-# ==============================
-logs/
+##################################
+# 💻 OS Files
+##################################
+.DS_Store
+Thumbs.db
+
+##################################
+# 📦 Logs & Temp Files
+##################################
 *.log
-npm-debug.log*
-yarn-error.log*
+*.tmp
+*.cache
 
-# ==============================
-# Node.js
-# ==============================
-node_modules/
-.npm/
-.cache/
-.parcel-cache/
-.eslintcache
+##################################
+# 📊 Monitoring / DevOps Tools
+##################################
+prometheus.yml
+grafana.db
 
-# ==============================
-# Build Output
-# ==============================
-dist/
-build/
+##################################
+# 🔧 CI/CD
+##################################
 coverage/
+reports/
 
-# ==============================
-# Environment Files
-# ==============================
-.env
-.env.*
-!.env.example
+##################################
+# 📁 Misc
+##################################
+*.bak
+*.backup
+##################################
+# 🚢 Helm
+##################################
+*.tgz
+charts/
+*.lock
 
-# ==============================
-# Kubernetes / Secrets
-# ==============================
-*.secret.yaml
-secrets.yaml
-.kube/
-kubeconfig*
-*.key
-*.crt
+##################################
+# ☸️ Kubernetes Temp
+##################################
+*.yaml.swp
+*.yml.swp
 
-# ==============================
-# Docker
-# ==============================
-*.tar
-docker-compose.override.yml
-
-# ==============================
-# Terraform (Optional)
-# ==============================
+##################################
+# 🧪 Minikube
+##################################
+.minikube/
+# Terraform (future safe)
 .terraform/
 *.tfstate
-*.tfstate.backup
 
-# ==============================
-# Temporary Files
-# ==============================
-tmp/
-temp/
-*.tmp
-*.bak
-# Python Virtual Environment
-venv/
-.venv/
-env/
+# AWS creds safety
+*.pem
+*.key
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# kubeconfig (important)
+kubeconfig

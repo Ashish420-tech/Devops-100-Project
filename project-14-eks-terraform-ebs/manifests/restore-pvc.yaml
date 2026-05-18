@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: restored-pvc
+  annotations:
+    volume.kubernetes.io/selected-node: ip-192-168-21-218.ap-south-1.compute.internal
+spec:
+  storageClassName: ebs-sc
+  dataSource:
+    name: ebs-snapshot
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 30Gi
