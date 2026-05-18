@@ -13,7 +13,7 @@ data:
     output.elasticsearch:
       hosts: ["https://devops-es-es-http:9200"]
       username: elastic
-      password: teUzUBNv98r38319pXWa24x5
+      password: ${ELASTIC_PASSWORD}
       ssl.verification_mode: none
 
 ---
