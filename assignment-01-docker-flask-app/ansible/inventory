@@ -1,0 +1,2 @@
+[jenkins]
+35.154.89.141 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ashish/devops100.pem

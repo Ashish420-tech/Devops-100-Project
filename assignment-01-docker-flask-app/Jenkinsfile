@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "ashishmondal420/flask-devsecops-app"
+        IMAGE_NAME = "ashishmondal420/multi-env-app"
     }
 
     stages {
@@ -16,11 +16,12 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install -r app/requirements.txt
-                pip install pytest
-                pytest tests/
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r app/requirements.txt
+                    pip install pytest
+                    pytest tests/
                 '''
             }
         }
@@ -39,8 +40,8 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    docker push $IMAGE_NAME
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                        docker push $IMAGE_NAME
                     '''
                 }
             }
@@ -49,8 +50,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                docker rm -f flask-app || true
-                docker run -d --name flask-app -p 5000:5000 $IMAGE_NAME
+                    docker rm -f flask-app || true
+                    docker run -d --name flask-app -p 5000:5000 $IMAGE_NAME
                 '''
             }
         }

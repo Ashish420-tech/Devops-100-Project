@@ -1,0 +1,65 @@
+---
+- name: Configure Jenkins Server
+  hosts: jenkins
+  become: yes
+
+  tasks:
+    - name: Remove broken Jenkins repo file
+      file:
+        path: /etc/apt/sources.list.d/jenkins.list
+        state: absent
+
+    - name: Clean apt cache
+      shell: apt clean
+
+    - name: Update apt
+      apt:
+        update_cache: yes
+
+    - name: Install dependencies
+      apt:
+        name:
+          - openjdk-17-jdk
+          - docker.io
+          - git
+          - curl
+          - unzip
+        state: present
+
+    - name: Start Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Add ubuntu to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Download Jenkins deb
+      get_url:
+        url: https://pkg.jenkins.io/debian-stable/binary/jenkins_2.504.3_all.deb
+        dest: /tmp/jenkins.deb
+
+    - name: Install Jenkins package
+      apt:
+        deb: /tmp/jenkins.deb
+
+    - name: Start Jenkins
+      systemd:
+        name: jenkins
+        enabled: yes
+        state: started
+
+    - name: Add Jenkins to docker group
+      user:
+        name: jenkins
+        groups: docker
+        append: yes
+
+    - name: Restart Jenkins
+      systemd:
+        name: jenkins
+        state: restarted
