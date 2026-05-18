@@ -1,0 +1,21 @@
+apiVersion: awx.ansible.com/v1beta1
+kind: AWX
+metadata:
+  name: awx-demo
+  namespace: awx
+
+spec:
+  service_type: NodePort
+
+  ingress_type: none
+
+  postgres_storage_class: gp2
+  postgres_storage_requirements:
+    requests:
+      storage: 8Gi
+
+  projects_persistence: true
+  projects_storage_class: gp2
+  projects_storage_size: 5Gi
+
+  admin_user: admin

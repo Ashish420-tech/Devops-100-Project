@@ -1,0 +1,74 @@
+name: Assignment 01 DevSecOps CI/CD
+
+on:
+  push:
+    branches:
+      - assignment-01-docker-flask-app
+  pull_request:
+    branches:
+      - assignment-01-docker-flask-app
+
+jobs:
+  devsecops:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: assignment-01-docker-flask-app
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks Secret Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r app/requirements.txt
+          pip install bandit pip-audit pytest
+
+      - name: Static Code Security Scan
+        run: |
+          bandit -r app/
+
+      - name: Dependency Vulnerability Scan
+        run: |
+          pip-audit || true
+
+      - name: Run Unit Tests
+        run: |
+          pytest
+
+      - name: Build Docker Image
+        run: |
+          docker build -t assignment01-flask .
+
+      - name: Container Vulnerability Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: assignment01-flask
+          format: table
+          exit-code: 0
+          severity: HIGH,CRITICAL
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker Image
+        run: |
+          docker tag assignment01-flask ${{ secrets.DOCKERHUB_USERNAME }}/assignment01-flask:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/assignment01-flask:latest
