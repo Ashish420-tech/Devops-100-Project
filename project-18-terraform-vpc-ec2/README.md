@@ -598,6 +598,116 @@ Destroy infrastructure after testing.
 
 ---
 
+# 🔍 Final Infrastructure Verification
+
+Use the following commands to verify whether AWS resources still exist after deployment or after running `terraform destroy`.
+
+---
+
+## Check EC2 Instances
+
+```bash
+aws ec2 describe-instances \
+--query 'Reservations[*].Instances[*].[InstanceId,State.Name,PublicIpAddress]' \
+--output table
+```
+
+---
+
+## Check VPCs
+
+```bash
+aws ec2 describe-vpcs \
+--query 'Vpcs[*].[VpcId,CidrBlock,State]' \
+--output table
+```
+
+---
+
+## Check Subnets
+
+```bash
+aws ec2 describe-subnets \
+--query 'Subnets[*].[SubnetId,VpcId,CidrBlock]' \
+--output table
+```
+
+---
+
+## Check NAT Gateways
+
+```bash
+aws ec2 describe-nat-gateways \
+--query 'NatGateways[*].[NatGatewayId,State]' \
+--output table
+```
+
+---
+
+## Check Internet Gateways
+
+```bash
+aws ec2 describe-internet-gateways \
+--query 'InternetGateways[*].[InternetGatewayId]' \
+--output table
+```
+
+---
+
+## Check Route Tables
+
+```bash
+aws ec2 describe-route-tables \
+--query 'RouteTables[*].[RouteTableId,VpcId]' \
+--output table
+```
+
+---
+
+## Check Security Groups
+
+```bash
+aws ec2 describe-security-groups \
+--query 'SecurityGroups[*].[GroupId,GroupName]' \
+--output table
+```
+
+---
+
+## Check Elastic IPs
+
+```bash
+aws ec2 describe-addresses \
+--query 'Addresses[*].[PublicIp,AllocationId]' \
+--output table
+```
+
+---
+
+## Check Terraform Managed Resources
+
+```bash
+terraform state list
+```
+
+---
+
+## Recommended Final Verification Script
+
+```bash
+echo "==== EC2 ====" && aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output table
+
+echo "==== NAT Gateway ====" && aws ec2 describe-nat-gateways --query 'NatGateways[*].[NatGatewayId,State]' --output table
+
+echo "==== Elastic IP ====" && aws ec2 describe-addresses --query 'Addresses[*].[PublicIp]' --output table
+
+echo "==== VPC ====" && aws ec2 describe-vpcs --query 'Vpcs[*].[VpcId,CidrBlock]' --output table
+```
+
+This helps ensure no billable AWS resources remain running after the project is completed.
+
+---
+
 # 🧹 Cleanup
 
 Destroy all infrastructure:
