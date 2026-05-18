@@ -76,12 +76,12 @@ resource "aws_eks_node_group" "nodes" {
   subnet_ids = var.private_subnets
 
   scaling_config {
-    desired_size = 2
-    min_size     = 1
-    max_size     = 3
+    desired_size = 3
+    min_size     = 2
+    max_size     = 5
   }
 
-  instance_types = ["t3.micro"]
+  instance_types = ["c7i-flex.large"]
   ami_type       = "AL2023_x86_64_STANDARD"
   capacity_type  = "ON_DEMAND"
 
