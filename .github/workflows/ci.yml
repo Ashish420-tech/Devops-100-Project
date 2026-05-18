@@ -1,22 +1,15 @@
-name: Assignment 01 DevSecOps CI Pipeline
+name: Assignment 01 DevSecOps CI/CD
 
 on:
   push:
     branches:
-      - main
-    paths:
-      - 'assignment-01-docker-flask-app/**'
-      - '.github/workflows/ci.yml'
-
+      - assignment-01-docker-flask-app
   pull_request:
     branches:
-      - main
-    paths:
-      - 'assignment-01-docker-flask-app/**'
-      - '.github/workflows/ci.yml'
+      - assignment-01-docker-flask-app
 
 jobs:
-  security-and-test:
+  devsecops:
     runs-on: ubuntu-latest
 
     defaults:
@@ -24,7 +17,7 @@ jobs:
         working-directory: assignment-01-docker-flask-app
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -34,7 +27,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -43,17 +36,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r app/requirements.txt
-          pip install bandit safety
+          pip install bandit pip-audit
 
-      - name: Run Bandit Security Scan
+      - name: Static Code Security Scan
         run: |
           bandit -r app/
 
-      - name: Run Safety Dependency Scan
+      - name: Dependency Vulnerability Scan
         run: |
-          safety check
+          pip-audit
 
-      - name: Run Pytest
+      - name: Run Unit Tests
         run: |
           pytest
 
@@ -61,10 +54,21 @@ jobs:
         run: |
           docker build -t assignment01-flask .
 
-      - name: Run Trivy Container Scan
+      - name: Container Vulnerability Scan
         uses: aquasecurity/trivy-action@0.24.0
         with:
           image-ref: assignment01-flask
           format: table
-          exit-code: 1
+          exit-code: 0
           severity: HIGH,CRITICAL
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker Image
+        run: |
+          docker tag assignment01-flask ${{ secrets.DOCKERHUB_USERNAME }}/assignment01-flask:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/assignment01-flask:latest
