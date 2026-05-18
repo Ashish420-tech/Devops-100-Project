@@ -1,4 +1,10 @@
+.vscode/
+venv/
 __pycache__/
 *.pyc
 .env
-.vscode/
+*.pem
+*.key
+secrets.txt
+terraform.tfstate
+terraform.tfstate.*
