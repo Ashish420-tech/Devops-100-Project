@@ -200,3 +200,62 @@ GitHub:
 https://github.com/Ashish420-tech
 
 ⭐ If you found this project useful, consider giving it a Star.
+# 📸 Screenshots
+
+## 🖥️ Grafana Dashboard
+
+Shows real-time monitoring of CPU, Memory, Disk, Network, Load Average and System Uptime.
+
+![Grafana Dashboard](screenshots/grafana-dashboard.png)
+
+---
+
+## 🎯 Prometheus Targets
+
+Prometheus successfully scraping all configured targets.
+
+![Prometheus Targets](screenshots/prometheus-targets.png)
+
+---
+
+## ⚡ CPU Metrics (Prometheus)
+
+Query:
+
+```promql
+node_cpu_seconds_total
+```
+
+![CPU Metrics](screenshots/cpu-dashboard.png)
+
+---
+
+## 🧠 Memory Metrics (Prometheus)
+
+Query:
+
+```promql
+node_memory_MemAvailable_bytes
+```
+
+![Memory Metrics](screenshots/memory-dashboard.png)
+
+---
+
+## 🌐 Network Metrics (Prometheus)
+
+Query:
+
+```promql
+node_network_receive_bytes_total
+```
+
+![Network Metrics](screenshots/network-dashboard.png)
+
+---
+
+## 📈 Node Exporter Metrics Endpoint
+
+Node Exporter exposes Linux system metrics on port **9100**.
+
+![Node Exporter Metrics](screenshots/node-exporter-metrics.png)
