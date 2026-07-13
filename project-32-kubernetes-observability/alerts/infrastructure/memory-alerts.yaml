@@ -1,0 +1,19 @@
+groups:
+- name: infrastructure.memory
+
+  rules:
+
+  - alert: NodeHighMemoryUsage
+
+    expr: node:memory_usage:percent > 90
+
+    for: 5m
+
+    labels:
+      severity: warning
+      team: platform
+      environment: lab
+
+    annotations:
+      summary: "High memory usage"
+      description: "Node memory usage has exceeded 90%."

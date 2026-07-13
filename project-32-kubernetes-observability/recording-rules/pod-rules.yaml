@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: custom-pod-recording-rules
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+
+  - name: custom.pod.rules
+
+    interval: 30s
+
+    rules:
+
+    - record: custom:pod_restart_count
+      expr: |
+        kube_pod_container_status_restarts_total
+
+    - record: custom:pod_memory_usage
+      expr: |
+        container_memory_working_set_bytes
+
+    - record: custom:pod_cpu_usage
+      expr: |
+        rate(container_cpu_usage_seconds_total[5m])
