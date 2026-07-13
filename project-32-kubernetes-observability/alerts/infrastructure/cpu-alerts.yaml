@@ -1,0 +1,19 @@
+groups:
+- name: infrastructure.cpu
+
+  rules:
+
+  - alert: NodeHighCPUUsage
+
+    expr: node:cpu_usage:percent > 80
+
+    for: 5m
+
+    labels:
+      severity: warning
+      team: platform
+      environment: lab
+
+    annotations:
+      summary: "High CPU usage detected"
+      description: "Node CPU usage is above 80% for more than 5 minutes."

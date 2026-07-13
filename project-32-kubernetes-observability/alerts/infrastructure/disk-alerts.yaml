@@ -1,0 +1,18 @@
+groups:
+- name: infrastructure.disk
+
+  rules:
+
+  - alert: NodeDiskUsageHigh
+
+    expr: node:filesystem_usage:percent > 85
+
+    for: 10m
+
+    labels:
+      severity: warning
+      team: platform
+
+    annotations:
+      summary: "Filesystem usage is high"
+      description: "Disk usage has exceeded 85%."
